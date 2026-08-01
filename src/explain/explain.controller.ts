@@ -9,6 +9,7 @@ export class ExplainController {
     @Inject(DATABASE) private readonly db: Database,
     private readonly products: ProductsRepository,
   ) {}
+
   @Get('products')
   async productsPlan(@Query() query: Record<string, string>): Promise<unknown> {
     const filters: ProductFilters = {
