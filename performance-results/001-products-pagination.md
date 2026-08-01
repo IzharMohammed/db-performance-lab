@@ -30,10 +30,7 @@ LIMIT 100 OFFSET 999900;
 ### Result before index
 
 - Execution time: `541.093 ms`
-- Planning time: `3.764 ms`
 - Api response time: `462ms`
-- Returned rows: `100`
-- Offset rows skipped: `999,900`
 
 ## How to interpret this query
 
@@ -78,10 +75,7 @@ LIMIT 100 OFFSET 999900;
 
 ### Result after index
 
-- Planning time: `0.656 ms`
 - Execution time: `1312.121 ms`
-- Is the `Sort` node gone?
-- Does the plan use `products_created_at_id_desc_idx`? yes
 - Api response time: `1.21 sec`
 
 Do not index `brands.name` or `categories.name` for this query. Neither column is filtered or sorted, while their automatic primary-key indexes already support the joins.
