@@ -16,7 +16,17 @@ export type Database = NodePgDatabase<typeof schema>;
       inject: [ConfigService],
       useFactory: (config: ConfigService): Database => {
         const connectionString = config.getOrThrow<string>('DATABASE_URL');
-        return drizzle(new Pool({ connectionString, max: 20 }), { schema });
+        
+        return drizzle(
+          new Pool({
+            connectionString,
+            max: 20,
+          }),
+          {
+            schema,
+            logger: true,
+          },
+        );
       },
     },
   ],
