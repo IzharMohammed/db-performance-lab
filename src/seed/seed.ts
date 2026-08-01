@@ -1,4 +1,5 @@
 import { faker } from '@faker-js/faker';
+import 'dotenv/config';
 import { Pool } from 'pg';
 
 type SeedScale = 'full' | 'small';
