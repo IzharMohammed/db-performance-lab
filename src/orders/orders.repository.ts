@@ -15,7 +15,8 @@ export class OrdersRepository {
       ORDER BY o.created_at DESC LIMIT 100`);
   }
   async findById(id: number): Promise<unknown> {
-    const result = await this.db.execute(sql`SELECT o.*, u.name AS user_name, u.email, oi.quantity, oi.price, p.name AS product_name
+    const result = await this.db
+      .execute(sql`SELECT o.*, u.name AS user_name, u.email, oi.quantity, oi.price, p.name AS product_name
       FROM orders o JOIN users u ON u.id = o.user_id LEFT JOIN order_items oi ON oi.order_id = o.id
       LEFT JOIN products p ON p.id = oi.product_id WHERE o.id = ${id}`);
     if (!result.rows.length) throw new NotFoundException(`Order ${id} was not found`);

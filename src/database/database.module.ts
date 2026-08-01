@@ -10,14 +10,16 @@ export type Database = NodePgDatabase<typeof schema>;
 @Global()
 @Module({
   imports: [ConfigModule],
-  providers: [{
-    provide: DATABASE,
-    inject: [ConfigService],
-    useFactory: (config: ConfigService): Database => {
-      const connectionString = config.getOrThrow<string>('DATABASE_URL');
-      return drizzle(new Pool({ connectionString, max: 20 }), { schema });
+  providers: [
+    {
+      provide: DATABASE,
+      inject: [ConfigService],
+      useFactory: (config: ConfigService): Database => {
+        const connectionString = config.getOrThrow<string>('DATABASE_URL');
+        return drizzle(new Pool({ connectionString, max: 20 }), { schema });
+      },
     },
-  }],
+  ],
   exports: [DATABASE],
 })
 export class DatabaseModule {}

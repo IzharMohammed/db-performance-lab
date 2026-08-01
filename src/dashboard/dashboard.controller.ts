@@ -14,7 +14,8 @@ export class DashboardController {
   }
   @Get('top-categories')
   topCategories(): Promise<unknown> {
-    return this.db.execute(sql`SELECT c.id, c.name, COUNT(DISTINCT o.id) AS order_count, SUM(oi.quantity * oi.price) AS revenue,
+    return this.db
+      .execute(sql`SELECT c.id, c.name, COUNT(DISTINCT o.id) AS order_count, SUM(oi.quantity * oi.price) AS revenue,
       MIN(p.price) AS cheapest_product, MAX(p.price) AS most_expensive_product, AVG(p.rating) AS average_rating
       FROM categories c JOIN products p ON p.category_id = c.id LEFT JOIN order_items oi ON oi.product_id = p.id
       LEFT JOIN orders o ON o.id = oi.order_id GROUP BY c.id, c.name HAVING COUNT(DISTINCT p.id) > 0 ORDER BY revenue DESC NULLS LAST`);
@@ -28,8 +29,14 @@ export class DashboardController {
   }
   @Get('top-customers')
   topCustomers(@Query('countries') countries?: string): Promise<unknown> {
-    const countryFilter = countries ? sql`WHERE u.country IN (${sql.join(countries.split(',').map((country) => sql`${country.trim()}`), sql`, `)})` : sql``;
-    return this.db.execute(sql`SELECT u.id, u.name, u.country, COUNT(o.id) AS order_count, SUM(o.total_amount) AS lifetime_value
+    const countryFilter = countries
+      ? sql`WHERE u.country IN (${sql.join(
+          countries.split(',').map((country) => sql`${country.trim()}`),
+          sql`, `,
+        )})`
+      : sql``;
+    return this.db
+      .execute(sql`SELECT u.id, u.name, u.country, COUNT(o.id) AS order_count, SUM(o.total_amount) AS lifetime_value
       FROM users u LEFT JOIN orders o ON o.user_id = u.id ${countryFilter} GROUP BY u.id, u.name, u.country
       HAVING COUNT(o.id) > 0 ORDER BY lifetime_value DESC LIMIT 100`);
   }
