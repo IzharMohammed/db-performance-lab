@@ -3,7 +3,6 @@ import { OrdersRepository } from './orders.repository';
 
 @Controller('orders')
 export class OrdersController {
-
   constructor(private readonly repository: OrdersRepository) {}
 
   @Get(':id') byId(@Param('id') id: string): Promise<unknown> {

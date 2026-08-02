@@ -4,9 +4,8 @@ import { DATABASE, Database } from '../database/database.module';
 
 @Injectable()
 export class OrdersRepository {
- 
   constructor(@Inject(DATABASE) private readonly db: Database) {}
- 
+
   async findByUser(userId: number, status?: string, from?: string, to?: string): Promise<unknown> {
     const dateFilter = from && to ? sql`AND o.created_at BETWEEN ${from}::timestamptz AND ${to}::timestamptz` : sql``;
     const statusFilter = status ? sql`AND o.status = ${status}` : sql``;
